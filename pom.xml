@@ -83,7 +83,59 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.8.0</version>
+                <configuration>
+                    <workingDirectory>graph-ui</workingDirectory>
+                    <installDirectory>installs</installDirectory>
+                    <nodeVersion>v10.16.0</nodeVersion>
+                    <yarnVersion>v1.17.3</yarnVersion>
+                </configuration>
+                <executions>
+                    <!-- these goals all default to generate-resources phase -->
+                    <execution>
+                        <id>install node and yarn</id>
+                        <goals>
+                            <goal>install-node-and-yarn</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>frontend-yarn-install</id>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>frontend-yarn-build</id>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>graph-ui/build</directory>
+                <targetPath>${basedir}/target/classes/public</targetPath>
+            </resource>
+        </resources>
 	</build>
 
 </project>

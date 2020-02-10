@@ -3,6 +3,7 @@ package com.solrgraphdemo.task
 
 import com.solrgraphdemo.model.Category
 import com.solrgraphdemo.query.GraphQuery
+import com.solrgraphdemo.utils.NoSuchCategoryException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
@@ -20,6 +21,9 @@ constructor(private val graphQuery: GraphQuery) : SearchTask<String, CategoryDto
     override fun runTask(argument: String): CategoryDto {
         graphQuery.dept = argument
         val tags = graphQuery.execute()
+        if (tags.isEmpty()) {
+            throw NoSuchCategoryException("No category: $argument")
+        }
         val dotFormat = buildDotFromCategories(tags)
         val graph = buildGraphFromCategories(tags)
         return CategoryDto(dotFormat, graph)

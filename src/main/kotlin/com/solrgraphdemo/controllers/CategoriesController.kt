@@ -11,8 +11,11 @@ class CategoriesController
 @Autowired
 constructor(private val graphSearchTask: GraphSearchTask) {
 
-    @RequestMapping(value = ["/category/{id}"], method = [RequestMethod.GET])
+    @RequestMapping(value = ["/api/category/{id}"], method = [RequestMethod.GET])
     fun getGraph(@PathVariable("id") id: String): ResponseEntity<CategoryDto> {
+        if (id.isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
         val categoryDto = graphSearchTask.runTask(id)
         return ResponseEntity.ok(categoryDto)
     }

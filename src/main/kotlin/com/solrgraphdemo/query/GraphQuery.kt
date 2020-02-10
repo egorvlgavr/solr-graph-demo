@@ -11,6 +11,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PR
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 import java.io.IOException
+import java.lang.RuntimeException
 import java.util.*
 
 
@@ -36,9 +37,9 @@ constructor(solrClient: SolrClient, solrProperties: SolrProperties) : Query<List
                     .results
                     .map { Category(it["id"] as String, it["out_edge_ss"] as? List<String>) }
         } catch (e: SolrServerException) {
-            emptyList()
+            throw RuntimeException("Error from Solr")
         } catch (e: IOException) {
-            emptyList()
+            throw RuntimeException("Error from Solr")
         }
 
     }
