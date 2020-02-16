@@ -18,6 +18,6 @@ class ControllerAdviceRequestError : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(value = [(RuntimeException::class)])
     fun handleRuntime(ex: RuntimeException,request: WebRequest): ResponseEntity<String> {
-        return ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)
+        return ResponseEntity(ex.message, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 }
