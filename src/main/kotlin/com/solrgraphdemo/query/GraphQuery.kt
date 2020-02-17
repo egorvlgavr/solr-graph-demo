@@ -22,12 +22,19 @@ class GraphQuery
 constructor(solrClient: SolrClient, solrProperties: SolrProperties) : Query<List<Category>>(solrClient) {
     var dept: String? = null
     private val collection: String = solrProperties.tagCollection
+    var maxDepth: Int = -1
 
     override fun execute(): List<Category> {
         if (Objects.isNull(dept)) {
             throw IllegalStateException("Departament can't be null!")
         }
-        val solrQuery = SolrQuery("{!graph from=id to=out_edge_ss traversalFilter='is_active_i:1' v=\$deptQuery}")
+        val solrQuery = SolrQuery(
+                "{!graph " +
+                        "from=id " +
+                        "to=out_edge_ss " +
+                        "traversalFilter='is_active_i:1' " +
+                        "maxDepth=$maxDepth " +
+                        "v=\$deptQuery}")
         solrQuery.add("deptQuery", "{!term f=id v=\$dept}")
         solrQuery.add("dept", dept)
         solrQuery.setFields("id", "out_edge_ss")

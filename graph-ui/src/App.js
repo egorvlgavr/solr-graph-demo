@@ -10,11 +10,9 @@ class App extends Component {
 
     constructor(props, context) {
         super(props, context);
-        // TODO do a request to get all depts
-        const depts = ['Bed & Bath', 'Furniture', 'Kitchen'];
         this.state = {
-            depts: depts,
-            selectedDept: depts[0],
+            depts: [],
+            selectedDept: null,
             dot: null,
             json: null,
             error: null,
@@ -23,6 +21,22 @@ class App extends Component {
 
         this.handleShow = this.handleShow.bind(this);
         this.handleChange = this.handleChange.bind(this);
+    }
+
+    componentDidMount() {
+        fetch('/api/departments')
+            .then(res => res.json())
+            .then((result) => {
+                this.setState({
+                    depts: result,
+                    selectedDept: result[0]
+                    }
+                );
+            },
+                (error) => {
+                    console.log(error);
+                    this.setState({isLoaded: false})
+                })
     }
 
     handleChange(e) {
